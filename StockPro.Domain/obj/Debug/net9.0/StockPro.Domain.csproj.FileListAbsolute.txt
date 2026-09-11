@@ -5,6 +5,7 @@ F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.GeneratedMSBu
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.AssemblyInfoInputs.cache
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.AssemblyInfo.cs
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.sourcelink.json
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.dll
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\refint\StockPro.Domain.dll
 F:\proje\ProBorsa\StockPro.Domain\obj\Debug\net9.0\StockPro.Domain.pdb

@@ -8,6 +8,7 @@ F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.Gen
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.AssemblyInfoInputs.cache
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.AssemblyInfo.cs
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.sourcelink.json
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.1D464AC6.Up2Date
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.dll
 F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\refint\StockPro.Application.dll

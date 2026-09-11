@@ -30,6 +30,7 @@ F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.GeneratedMS
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.AssemblyInfoInputs.cache
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.AssemblyInfo.cs
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.sourcelink.json
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.1158A569.Up2Date
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App.dll
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\refint\StockPro.App.dll

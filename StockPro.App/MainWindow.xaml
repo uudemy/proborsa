@@ -10,8 +10,6 @@
         Background="{StaticResource BackgroundBrush}"
         Foreground="{StaticResource TextPrimaryBrush}"
         WindowStartupLocation="CenterScreen">
-
-    ```
     <Grid>
 
         <Grid.RowDefinitions>

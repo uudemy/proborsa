@@ -10,6 +10,7 @@ F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructu
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.AssemblyInfoInputs.cache
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.AssemblyInfo.cs
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.sourcelink.json
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.3B526E9C.Up2Date
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.dll
 F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\refint\StockPro.Infrastructure.dll
