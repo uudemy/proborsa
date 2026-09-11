@@ -1,0 +1,17 @@
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Infrastructure.deps.json
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Infrastructure.dll
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Infrastructure.pdb
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Application.dll
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Domain.dll
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Application.pdb
+F:\proje\ProBorsa\StockPro.Infrastructure\bin\Debug\net9.0\StockPro.Domain.pdb
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.csproj.AssemblyReference.cache
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.AssemblyInfoInputs.cache
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.AssemblyInfo.cs
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.3B526E9C.Up2Date
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.dll
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\refint\StockPro.Infrastructure.dll
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\StockPro.Infrastructure.pdb
+F:\proje\ProBorsa\StockPro.Infrastructure\obj\Debug\net9.0\ref\StockPro.Infrastructure.dll

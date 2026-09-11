@@ -1,0 +1,15 @@
+F:\proje\ProBorsa\StockPro.Application\bin\Debug\net9.0\StockPro.Application.deps.json
+F:\proje\ProBorsa\StockPro.Application\bin\Debug\net9.0\StockPro.Application.dll
+F:\proje\ProBorsa\StockPro.Application\bin\Debug\net9.0\StockPro.Application.pdb
+F:\proje\ProBorsa\StockPro.Application\bin\Debug\net9.0\StockPro.Domain.dll
+F:\proje\ProBorsa\StockPro.Application\bin\Debug\net9.0\StockPro.Domain.pdb
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.csproj.AssemblyReference.cache
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.AssemblyInfoInputs.cache
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.AssemblyInfo.cs
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.csproj.CoreCompileInputs.cache
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.1D464AC6.Up2Date
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.dll
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\refint\StockPro.Application.dll
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\StockPro.Application.pdb
+F:\proje\ProBorsa\StockPro.Application\obj\Debug\net9.0\ref\StockPro.Application.dll

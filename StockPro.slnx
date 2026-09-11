@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="StockPro.App/StockPro.App.csproj" />
+  <Project Path="StockPro.Application/StockPro.Application.csproj" />
+  <Project Path="StockPro.Domain/StockPro.Domain.csproj" />
+  <Project Path="StockPro.Infrastructure/StockPro.Infrastructure.csproj" />
+  <Project Path="StockPro.Tests/StockPro.Tests.csproj" />
+</Solution>

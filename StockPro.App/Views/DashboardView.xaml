@@ -1,0 +1,455 @@
+<UserControl x:Class="StockPro.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel Margin="24">
+
+            <!-- Page Header -->
+
+            <Grid Margin="0,0,0,18">
+
+                <StackPanel>
+
+                    <TextBlock Text="Dashboard"
+                               Style="{StaticResource PageTitleStyle}" />
+
+                    <TextBlock Text="Market overview and portfolio snapshot"
+                               Margin="0,5,0,0"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               FontSize="12" />
+
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+
+                    <Button Content="↻ Refresh"
+                            Style="{StaticResource ToolbarButtonStyle}" />
+
+                    <Button Content="+ Add"
+                            Margin="8,0,0,0"
+                            Style="{StaticResource ToolbarButtonStyle}" />
+
+                </StackPanel>
+
+            </Grid>
+
+            <!-- Market Summary -->
+
+            <UniformGrid Columns="4"
+                         Margin="0,0,0,16">
+
+                <Border Style="{StaticResource CardBorderStyle}"
+                        Margin="0,0,8,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="BIST 100"
+                                   Style="{StaticResource SecondaryTextStyle}" />
+
+                        <TextBlock Text="10,482.31"
+                                   Margin="0,8,0,0"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" />
+
+                        <TextBlock Text="+1.24%"
+                                   Margin="0,4,0,0"
+                                   FontSize="12"
+                                   Foreground="{StaticResource PositiveBrush}" />
+
+                    </StackPanel>
+
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}"
+                        Margin="8,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="USD / TRY"
+                                   Style="{StaticResource SecondaryTextStyle}" />
+
+                        <TextBlock Text="41.2840"
+                                   Margin="0,8,0,0"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" />
+
+                        <TextBlock Text="+0.18%"
+                                   Margin="0,4,0,0"
+                                   FontSize="12"
+                                   Foreground="{StaticResource PositiveBrush}" />
+
+                    </StackPanel>
+
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}"
+                        Margin="8,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Gold"
+                                   Style="{StaticResource SecondaryTextStyle}" />
+
+                        <TextBlock Text="4,382.70"
+                                   Margin="0,8,0,0"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" />
+
+                        <TextBlock Text="-0.32%"
+                                   Margin="0,4,0,0"
+                                   FontSize="12"
+                                   Foreground="{StaticResource NegativeBrush}" />
+
+                    </StackPanel>
+
+                </Border>
+
+                <Border Style="{StaticResource CardBorderStyle}"
+                        Margin="8,0,0,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Bitcoin"
+                                   Style="{StaticResource SecondaryTextStyle}" />
+
+                        <TextBlock Text="104,820"
+                                   Margin="0,8,0,0"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" />
+
+                        <TextBlock Text="+2.41%"
+                                   Margin="0,4,0,0"
+                                   FontSize="12"
+                                   Foreground="{StaticResource PositiveBrush}" />
+
+                    </StackPanel>
+
+                </Border>
+
+            </UniformGrid>
+
+            <!-- Main Dashboard -->
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Market Chart -->
+
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardBorderStyle}"
+                        Margin="0,0,8,0"
+                        MinHeight="350">
+
+                    <StackPanel>
+
+                        <Grid>
+
+                            <TextBlock Text="Market Overview"
+                                       Style="{StaticResource SectionTitleStyle}" />
+
+                            <StackPanel HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+
+                                <Button Content="1D"
+                                        Style="{StaticResource ToolbarButtonStyle}" />
+
+                                <Button Content="1W"
+                                        Style="{StaticResource ToolbarButtonStyle}" />
+
+                                <Button Content="1M"
+                                        Style="{StaticResource ToolbarButtonStyle}" />
+
+                            </StackPanel>
+
+                        </Grid>
+
+                        <Border Margin="0,18,0,0"
+                                Height="270"
+                                Background="{StaticResource BackgroundBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+
+                                    <Line X1="0"
+                                          Y1="55"
+                                          X2="700"
+                                          Y2="55"
+                                          Stroke="{StaticResource BorderBrush}"
+                                          StrokeThickness="1" />
+
+                                    <Line X1="0"
+                                          Y1="110"
+                                          X2="700"
+                                          Y2="110"
+                                          Stroke="{StaticResource BorderBrush}"
+                                          StrokeThickness="1" />
+
+                                    <Line X1="0"
+                                          Y1="165"
+                                          X2="700"
+                                          Y2="165"
+                                          Stroke="{StaticResource BorderBrush}"
+                                          StrokeThickness="1" />
+
+                                    <Line X1="0"
+                                          Y1="220"
+                                          X2="700"
+                                          Y2="220"
+                                          Stroke="{StaticResource BorderBrush}"
+                                          StrokeThickness="1" />
+
+                                    <Polyline
+                                        Points="0,190 70,172 140,181 210,135 280,150 350,108 420,125 490,80 560,96 630,62 700,72"
+                                        Stroke="{StaticResource AccentBrush}"
+                                        StrokeThickness="2"
+                                        Fill="Transparent"
+                                        Stretch="Fill" />
+
+                                </Grid>
+
+                                <TextBlock Grid.Row="1"
+                                           Text="Demo market chart"
+                                           Margin="0,8,0,10"
+                                           HorizontalAlignment="Center"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondaryBrush}" />
+
+                            </Grid>
+
+                        </Border>
+
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Top Movers -->
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource CardBorderStyle}"
+                        Margin="8,0,0,0"
+                        MinHeight="350">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Top Movers"
+                                   Style="{StaticResource SectionTitleStyle}" />
+
+                        <Grid Margin="0,18,0,8">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Symbol"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Change"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                        </Grid>
+
+                        <Separator Background="{StaticResource BorderBrush}" />
+
+                        <Grid Margin="0,14,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="THYAO"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="+3.42%"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </Grid>
+
+                        <Grid Margin="0,18,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="ASELS"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="+2.87%"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </Grid>
+
+                        <Grid Margin="0,18,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="TUPRS"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="-1.16%"
+                                       Foreground="{StaticResource NegativeBrush}" />
+
+                        </Grid>
+
+                        <Grid Margin="0,18,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="GARAN"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="+0.94%"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </Grid>
+
+                        <Grid Margin="0,18,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="SISE"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="+0.71%"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </Grid>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+            <!-- Market Indices -->
+
+            <Border Style="{StaticResource CardBorderStyle}"
+                    Margin="0,16,0,0">
+
+                <StackPanel>
+
+                    <TextBlock Text="Global Markets"
+                               Style="{StaticResource SectionTitleStyle}" />
+
+                    <UniformGrid Columns="4"
+                                 Margin="0,16,0,0">
+
+                        <StackPanel>
+
+                            <TextBlock Text="S&amp;P 500"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                            <TextBlock Text="6,412.40"
+                                       Margin="0,5,0,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Text="+0.62%"
+                                       Margin="0,3,0,0"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </StackPanel>
+
+                        <StackPanel>
+
+                            <TextBlock Text="NASDAQ"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                            <TextBlock Text="21,812.30"
+                                       Margin="0,5,0,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Text="+0.84%"
+                                       Margin="0,3,0,0"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </StackPanel>
+
+                        <StackPanel>
+
+                            <TextBlock Text="Dow Jones"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                            <TextBlock Text="44,921.10"
+                                       Margin="0,5,0,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Text="-0.12%"
+                                       Margin="0,3,0,0"
+                                       Foreground="{StaticResource NegativeBrush}" />
+
+                        </StackPanel>
+
+                        <StackPanel>
+
+                            <TextBlock Text="BIST 30"
+                                       Style="{StaticResource SecondaryTextStyle}" />
+
+                            <TextBlock Text="11,842.70"
+                                       Margin="0,5,0,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+                            <TextBlock Text="+1.48%"
+                                       Margin="0,3,0,0"
+                                       Foreground="{StaticResource PositiveBrush}" />
+
+                        </StackPanel>
+
+                    </UniformGrid>
+
+                </StackPanel>
+
+            </Border>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</UserControl>
