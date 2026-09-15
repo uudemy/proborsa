@@ -1,5 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using StockPro.App.Models;
 
 namespace StockPro.App.ViewModels;
@@ -51,21 +54,7 @@ public partial class DashboardViewModel : ObservableObject
             new StockMovementViewModel("YKBNK", "34,16", "-2,85%")
         ];
 
-        ChartPoints =
-        [
-            new ChartPoint(DateTime.Today.AddHours(9.5), 10720),
-            new ChartPoint(DateTime.Today.AddHours(10), 10765),
-            new ChartPoint(DateTime.Today.AddHours(10.5), 10740),
-            new ChartPoint(DateTime.Today.AddHours(11), 10820),
-            new ChartPoint(DateTime.Today.AddHours(11.5), 10805),
-            new ChartPoint(DateTime.Today.AddHours(12), 10855),
-            new ChartPoint(DateTime.Today.AddHours(12.5), 10830),
-            new ChartPoint(DateTime.Today.AddHours(13), 10890),
-            new ChartPoint(DateTime.Today.AddHours(13.5), 10865),
-            new ChartPoint(DateTime.Today.AddHours(14), 10920),
-            new ChartPoint(DateTime.Today.AddHours(14.5), 10895),
-            new ChartPoint(DateTime.Today.AddHours(15), 10842)
-        ];
+        ChartPoints = CreateChartPoints("1G");
     }
 
     public ObservableCollection<MarketCardViewModel> MarketCards { get; }
@@ -76,9 +65,164 @@ public partial class DashboardViewModel : ObservableObject
 
     public ObservableCollection<ChartPoint> ChartPoints { get; }
 
-    public string SelectedPeriod { get; set; } = "1G";
+    [ObservableProperty]
+    private string _selectedPeriod = "1G";
 
     public string MarketStatus { get; } = "Piyasa Açık";
+
+    [RelayCommand]
+    private void SelectPeriod(string? period)
+    {
+        if (string.IsNullOrWhiteSpace(period))
+            return;
+
+        if (SelectedPeriod == period)
+            return;
+
+        SelectedPeriod = period;
+
+        var newPoints = CreateChartPoints(period);
+
+        ChartPoints.Clear();
+
+        foreach (var point in newPoints)
+        {
+            ChartPoints.Add(point);
+        }
+    }
+
+    private static ObservableCollection<ChartPoint> CreateChartPoints(
+        string period)
+    {
+        return period switch
+        {
+            "1G" => CreateDayPoints(),
+            "1H" => CreateWeekPoints(),
+            "1A" => CreateMonthPoints(),
+            "1Y" => CreateYearPoints(),
+            _ => CreateDayPoints()
+        };
+    }
+
+    private static ObservableCollection<ChartPoint> CreateDayPoints()
+    {
+        var points = new ObservableCollection<ChartPoint>();
+
+        decimal[] values =
+        [
+            10720,
+            10765,
+            10740,
+            10820,
+            10805,
+            10855,
+            10830,
+            10890,
+            10865,
+            10920,
+            10895,
+            10842
+        ];
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            points.Add(
+                new ChartPoint(
+                    DateTime.Today.AddMinutes(570 + i * 30),
+                    values[i]));
+        }
+
+        return points;
+    }
+
+    private static ObservableCollection<ChartPoint> CreateWeekPoints()
+    {
+        var points = new ObservableCollection<ChartPoint>();
+
+        decimal[] values =
+        [
+            10620,
+            10685,
+            10710,
+            10655,
+            10740,
+            10810,
+            10785,
+            10842
+        ];
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            points.Add(
+                new ChartPoint(
+                    DateTime.Today.AddDays(-7 + i),
+                    values[i]));
+        }
+
+        return points;
+    }
+
+    private static ObservableCollection<ChartPoint> CreateMonthPoints()
+    {
+        var points = new ObservableCollection<ChartPoint>();
+
+        decimal[] values =
+        [
+            10120,
+            10240,
+            10185,
+            10310,
+            10420,
+            10365,
+            10510,
+            10480,
+            10620,
+            10585,
+            10710,
+            10842
+        ];
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            points.Add(
+                new ChartPoint(
+                    DateTime.Today.AddDays(-30 + i * 3),
+                    values[i]));
+        }
+
+        return points;
+    }
+
+    private static ObservableCollection<ChartPoint> CreateYearPoints()
+    {
+        var points = new ObservableCollection<ChartPoint>();
+
+        decimal[] values =
+        [
+            8420,
+            8650,
+            8910,
+            8760,
+            9180,
+            9450,
+            9320,
+            9780,
+            10020,
+            10280,
+            10540,
+            10842
+        ];
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            points.Add(
+                new ChartPoint(
+                    DateTime.Today.AddMonths(-11 + i),
+                    values[i]));
+        }
+
+        return points;
+    }
 }
 
 public sealed record MarketCardViewModel(

@@ -30,12 +30,14 @@
             <Grid Grid.Row="0">
 
                 <StackPanel>
+
                     <TextBlock Text="Dashboard"
                                Style="{StaticResource PageTitleStyle}"/>
 
                     <TextBlock Text="Piyasa genel görünümü ve güncel işlem verileri"
                                Margin="0,5,0,0"
                                Style="{StaticResource SecondaryTextStyle}"/>
+
                 </StackPanel>
 
                 <Border HorizontalAlignment="Right"
@@ -124,6 +126,7 @@
                             <RowDefinition Height="300"/>
                         </Grid.RowDefinitions>
 
+                        <!-- CHART HEADER -->
                         <Grid Grid.Row="0">
 
                             <StackPanel>
@@ -137,45 +140,174 @@
 
                             </StackPanel>
 
+                            <!-- PERIOD BUTTONS -->
                             <StackPanel HorizontalAlignment="Right"
                                         Orientation="Horizontal">
 
+                                <!-- 1G -->
                                 <Button Content="1G"
-                                        Style="{StaticResource ToolbarButtonStyle}"
-                                        Margin="0,0,5,0"/>
+                                        Command="{Binding SelectPeriodCommand}"
+                                        CommandParameter="1G"
+                                        Margin="0,0,5,0">
 
+                                    <Button.Style>
+
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource ToolbarButtonStyle}">
+
+                                            <Setter Property="Opacity"
+                                                    Value="0.55"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding SelectedPeriod}"
+                                                             Value="1G">
+
+                                                    <Setter Property="Opacity"
+                                                            Value="1"/>
+
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource AccentBrush}"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="White"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                </Button>
+
+                                <!-- 1H -->
                                 <Button Content="1H"
-                                        Style="{StaticResource ToolbarButtonStyle}"
-                                        Margin="0,0,5,0"/>
+                                        Command="{Binding SelectPeriodCommand}"
+                                        CommandParameter="1H"
+                                        Margin="0,0,5,0">
 
+                                    <Button.Style>
+
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource ToolbarButtonStyle}">
+
+                                            <Setter Property="Opacity"
+                                                    Value="0.55"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding SelectedPeriod}"
+                                                             Value="1H">
+
+                                                    <Setter Property="Opacity"
+                                                            Value="1"/>
+
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource AccentBrush}"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="White"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                </Button>
+
+                                <!-- 1A -->
                                 <Button Content="1A"
-                                        Style="{StaticResource ToolbarButtonStyle}"
-                                        Margin="0,0,5,0"/>
+                                        Command="{Binding SelectPeriodCommand}"
+                                        CommandParameter="1A"
+                                        Margin="0,0,5,0">
 
+                                    <Button.Style>
+
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource ToolbarButtonStyle}">
+
+                                            <Setter Property="Opacity"
+                                                    Value="0.55"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding SelectedPeriod}"
+                                                             Value="1A">
+
+                                                    <Setter Property="Opacity"
+                                                            Value="1"/>
+
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource AccentBrush}"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="White"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                </Button>
+
+                                <!-- 1Y -->
                                 <Button Content="1Y"
-                                        Style="{StaticResource ToolbarButtonStyle}"/>
+                                        Command="{Binding SelectPeriodCommand}"
+                                        CommandParameter="1Y">
+
+                                    <Button.Style>
+
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource ToolbarButtonStyle}">
+
+                                            <Setter Property="Opacity"
+                                                    Value="0.55"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding SelectedPeriod}"
+                                                             Value="1Y">
+
+                                                    <Setter Property="Opacity"
+                                                            Value="1"/>
+
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource AccentBrush}"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="White"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+
+                                    </Button.Style>
+
+                                </Button>
 
                             </StackPanel>
 
                         </Grid>
 
-                        <!-- CHART PLACEHOLDER -->
+                        <!-- BIST CHART -->
                         <Border Grid.Row="2"
                                 Background="{StaticResource SurfaceSecondaryBrush}"
                                 BorderBrush="{StaticResource BorderBrush}"
                                 BorderThickness="1"
                                 CornerRadius="4">
 
-                            <Grid>
-
-                                <TextBlock Text="BIST 100 CHART"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Foreground="{StaticResource TextSecondaryBrush}"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"/>
-
-                            </Grid>
+                            <Canvas x:Name="BistChartCanvas"
+                                    Margin="4"/>
 
                         </Border>
 
