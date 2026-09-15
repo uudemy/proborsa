@@ -144,7 +144,6 @@
                             <StackPanel HorizontalAlignment="Right"
                                         Orientation="Horizontal">
 
-                                <!-- 1G -->
                                 <Button Content="1G"
                                         Command="{Binding SelectPeriodCommand}"
                                         CommandParameter="1G"
@@ -182,7 +181,6 @@
 
                                 </Button>
 
-                                <!-- 1H -->
                                 <Button Content="1H"
                                         Command="{Binding SelectPeriodCommand}"
                                         CommandParameter="1H"
@@ -220,7 +218,6 @@
 
                                 </Button>
 
-                                <!-- 1A -->
                                 <Button Content="1A"
                                         Command="{Binding SelectPeriodCommand}"
                                         CommandParameter="1A"
@@ -258,7 +255,6 @@
 
                                 </Button>
 
-                                <!-- 1Y -->
                                 <Button Content="1Y"
                                         Command="{Binding SelectPeriodCommand}"
                                         CommandParameter="1Y">
@@ -432,38 +428,119 @@
 
                 <StackPanel Margin="18">
 
-                    <TextBlock Text="Piyasa İzleme"
-                               Style="{StaticResource SectionTitleStyle}"/>
-
-                    <TextBlock Text="Takip listenizdeki hisseleri buradan izleyebilirsiniz."
-                               Margin="0,5,0,15"
-                               Style="{StaticResource SecondaryTextStyle}"/>
-
                     <Grid>
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+
+                            <TextBlock Text="Piyasa İzleme"
+                                       Style="{StaticResource SectionTitleStyle}"/>
+
+                            <TextBlock Text="Takip listenizdeki hisseler"
+                                       Margin="0,5,0,0"
+                                       Style="{StaticResource SecondaryTextStyle}"/>
+
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Watchlist.Count, StringFormat={}{0} hisse}"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="12"/>
+
+                    </Grid>
+
+                    <!-- TABLE HEADER -->
+                    <Grid Margin="0,20,0,0">
+
+                        <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="Sembol"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"/>
 
                         <TextBlock Grid.Column="1"
                                    Text="Fiyat"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"/>
 
                         <TextBlock Grid.Column="2"
                                    Text="Değişim"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"/>
 
                         <TextBlock Grid.Column="3"
                                    Text="Durum"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"/>
 
                     </Grid>
+
+                    <!-- WATCHLIST ROWS -->
+                    <ItemsControl ItemsSource="{Binding Watchlist}"
+                                  Margin="0,8,0,0">
+
+                        <ItemsControl.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="0,1,0,0"
+                                        Padding="0,12">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="120"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding Symbol}"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Price}"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding Change}"
+                                                   Foreground="{Binding IsPositive,
+                                                        Converter={StaticResource BooleanToPositiveBrushConverter}}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Grid.Column="3"
+                                                   Text="Aktif"
+                                                   Foreground="{StaticResource PositiveBrush}"
+                                                   VerticalAlignment="Center"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
 
                 </StackPanel>
 

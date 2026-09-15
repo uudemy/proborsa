@@ -1,228 +1,599 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StockPro.App.Models;
+using StockPro.Application.Interfaces;
+using StockPro.Domain.Entities;
+using StockPro.Domain.Enums;
 
 namespace StockPro.App.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
-    public DashboardViewModel()
+    private readonly IMarketDataService _marketDataService;
+
+    private readonly DispatcherTimer _refreshTimer;
+
+    private CancellationTokenSource?
+        _refreshCancellationTokenSource;
+
+    private static readonly string[] WatchSymbols =
+    [
+        "THYAO",
+        "ASELS",
+        "TUPRS",
+        "SISE"
+    ];
+
+    private static readonly string[] MovementSymbols =
+    [
+        "THYAO",
+        "ASELS",
+        "TUPRS",
+        "SISE",
+        "EREGL",
+        "KCHOL",
+        "PETKM",
+        "YKBNK",
+        "GARAN",
+        "AKBNK"
+    ];
+
+    public DashboardViewModel(
+        IMarketDataService marketDataService)
     {
-        MarketCards =
-        [
-            new MarketCardViewModel(
-                "BIST 100",
-                "10.842,31",
-                "▲ 124,56   +1,16%",
-                true),
+        _marketDataService =
+            marketDataService;
 
-            new MarketCardViewModel(
-                "USD / TRY",
-                "41,2875",
-                "▲ 0,0825   +0,20%",
-                true),
+        MarketCards = [];
 
-            new MarketCardViewModel(
-                "EUR / TRY",
-                "48,6120",
-                "▼ 0,1540   -0,32%",
-                false),
+        TopGainers = [];
 
-            new MarketCardViewModel(
-                "GRAM ALTIN",
-                "4.386,20",
-                "▲ 18,40   +0,42%",
-                true)
-        ];
+        TopLosers = [];
 
-        TopGainers =
-        [
-            new StockMovementViewModel("ASELS", "185,40", "+6,42%"),
-            new StockMovementViewModel("THYAO", "318,75", "+5,18%"),
-            new StockMovementViewModel("TUPRS", "164,20", "+4,73%"),
-            new StockMovementViewModel("EREGL", "72,15", "+3,91%")
-        ];
+        Watchlist = [];
 
-        TopLosers =
-        [
-            new StockMovementViewModel("SISE", "48,32", "-4,12%"),
-            new StockMovementViewModel("KCHOL", "182,50", "-3,64%"),
-            new StockMovementViewModel("PETKM", "22,84", "-3,27%"),
-            new StockMovementViewModel("YKBNK", "34,16", "-2,85%")
-        ];
+        ChartPoints = [];
 
-        ChartPoints = CreateChartPoints("1G");
+        _refreshTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(30)
+        };
+
+        _refreshTimer.Tick +=
+            RefreshTimer_Tick;
+
+        _ = LoadMarketDataAsync();
     }
 
-    public ObservableCollection<MarketCardViewModel> MarketCards { get; }
+    public ObservableCollection<MarketCardViewModel>
+        MarketCards { get; }
 
-    public ObservableCollection<StockMovementViewModel> TopGainers { get; }
+    public ObservableCollection<StockMovementViewModel>
+        TopGainers { get; }
 
-    public ObservableCollection<StockMovementViewModel> TopLosers { get; }
+    public ObservableCollection<StockMovementViewModel>
+        TopLosers { get; }
 
-    public ObservableCollection<ChartPoint> ChartPoints { get; }
+    public ObservableCollection<WatchlistItemViewModel>
+        Watchlist { get; }
+
+    public ObservableCollection<ChartPoint>
+        ChartPoints { get; }
 
     [ObservableProperty]
     private string _selectedPeriod = "1G";
 
-    public string MarketStatus { get; } = "Piyasa Açık";
+    [ObservableProperty]
+    private string _marketStatus =
+        "Veri bekleniyor...";
+
+    [ObservableProperty]
+    private string _lastUpdated = "-";
+
+    [ObservableProperty]
+    private bool _isLoading;
+
+    [ObservableProperty]
+    private string _errorMessage =
+        string.Empty;
+
+    private async void RefreshTimer_Tick(
+        object? sender,
+        EventArgs e)
+    {
+        await LoadMarketDataAsync();
+    }
 
     [RelayCommand]
-    private void SelectPeriod(string? period)
+    private async Task SelectPeriodAsync(
+        string? period)
     {
         if (string.IsNullOrWhiteSpace(period))
+        {
             return;
+        }
 
         if (SelectedPeriod == period)
+        {
             return;
+        }
 
         SelectedPeriod = period;
 
-        var newPoints = CreateChartPoints(period);
+        await LoadChartAsync();
+    }
+
+    private async Task LoadMarketDataAsync()
+    {
+        if (IsLoading)
+        {
+            return;
+        }
+
+        _refreshCancellationTokenSource?.Cancel();
+
+        _refreshCancellationTokenSource?.Dispose();
+
+        _refreshCancellationTokenSource =
+            new CancellationTokenSource();
+
+        var cancellationToken =
+            _refreshCancellationTokenSource.Token;
+
+        try
+        {
+            IsLoading = true;
+
+            ErrorMessage =
+                string.Empty;
+
+            var marketSymbols =
+                new[]
+                {
+                    "BIST100",
+                    "USDTRY",
+                    "EURTRY",
+                    "GOLD"
+                };
+
+            var marketTasks =
+                marketSymbols
+                    .Select(
+                        symbol =>
+                            GetMarketQuoteAsync(
+                                symbol,
+                                cancellationToken))
+                    .ToArray();
+
+            var marketQuotes =
+                await Task.WhenAll(
+                    marketTasks);
+
+            cancellationToken
+                .ThrowIfCancellationRequested();
+
+            var bistQuote =
+                marketQuotes[0];
+
+            var usdTryQuote =
+                marketQuotes[1];
+
+            var eurTryQuote =
+                marketQuotes[2];
+
+            var goldQuote =
+                marketQuotes[3];
+
+            BuildMarketCards(
+                bistQuote,
+                usdTryQuote,
+                eurTryQuote,
+                goldQuote);
+
+            await LoadStockMovementsAsync(
+                cancellationToken);
+
+            await LoadWatchlistAsync(
+                cancellationToken);
+
+            await LoadChartAsync(
+                cancellationToken);
+
+            MarketStatus =
+                DetermineMarketStatus();
+
+            LastUpdated =
+                DateTime.Now.ToString(
+                    "dd.MM.yyyy HH:mm:ss",
+                    CultureInfo
+                        .GetCultureInfo("tr-TR"));
+
+            if (!_refreshTimer.IsEnabled)
+            {
+                _refreshTimer.Start();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage =
+                $"Veri alınamadı: {ex.Message}";
+
+            MarketStatus =
+                "Veri bağlantısı başarısız";
+
+            if (!_refreshTimer.IsEnabled)
+            {
+                _refreshTimer.Start();
+            }
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task<Quote?> GetMarketQuoteAsync(
+        string symbol,
+        CancellationToken cancellationToken)
+    {
+        return await _marketDataService
+            .GetQuoteAsync(
+                symbol,
+                cancellationToken);
+    }
+
+    private void BuildMarketCards(
+        Quote? bistQuote,
+        Quote? usdTryQuote,
+        Quote? eurTryQuote,
+        Quote? goldQuote)
+    {
+        MarketCards.Clear();
+
+        if (bistQuote is not null)
+        {
+            MarketCards.Add(
+                CreateMarketCard(
+                    "BIST 100",
+                    bistQuote));
+        }
+
+        if (usdTryQuote is not null)
+        {
+            MarketCards.Add(
+                CreateMarketCard(
+                    "USD / TRY",
+                    usdTryQuote));
+        }
+
+        if (eurTryQuote is not null)
+        {
+            MarketCards.Add(
+                CreateMarketCard(
+                    "EUR / TRY",
+                    eurTryQuote));
+        }
+
+        if (goldQuote is not null)
+        {
+            var usdTry =
+                usdTryQuote?.LastPrice ?? 0;
+
+            var gramGold =
+                usdTry > 0
+                    ? goldQuote.LastPrice *
+                      usdTry /
+                      31.1034768m
+                    : goldQuote.LastPrice;
+
+            var previousGramGold =
+                usdTry > 0
+                    ? goldQuote.PreviousClose *
+                      usdTry /
+                      31.1034768m
+                    : goldQuote.PreviousClose;
+
+            var change =
+                gramGold -
+                previousGramGold;
+
+            var changePercent =
+                previousGramGold == 0
+                    ? 0
+                    : change /
+                      previousGramGold *
+                      100m;
+
+            MarketCards.Add(
+                new MarketCardViewModel(
+                    "GRAM ALTIN",
+                    FormatPrice(
+                        gramGold),
+                    FormatChange(
+                        change,
+                        changePercent),
+                    change >= 0));
+        }
+    }
+
+    private static MarketCardViewModel
+        CreateMarketCard(
+            string name,
+            Quote quote)
+    {
+        return new MarketCardViewModel(
+            name,
+            FormatPrice(
+                quote.LastPrice),
+            FormatChange(
+                quote.Change,
+                quote.ChangePercent),
+            quote.Change >= 0);
+    }
+
+    private async Task LoadStockMovementsAsync(
+        CancellationToken cancellationToken)
+    {
+        var quotes =
+            await _marketDataService
+                .GetQuotesAsync(
+                    MovementSymbols,
+                    cancellationToken);
+
+        var quoteItems =
+            new List<QuoteItem>();
+
+        for (int i = 0;
+             i < quotes.Count &&
+             i < MovementSymbols.Length;
+             i++)
+        {
+            var quote =
+                quotes[i];
+
+            if (quote is null)
+            {
+                continue;
+            }
+
+            quoteItems.Add(
+                new QuoteItem(
+                    MovementSymbols[i],
+                    quote));
+        }
+
+        var validQuotes =
+            quoteItems
+                .Where(
+                    x =>
+                        x.Quote.PreviousClose > 0)
+                .ToList();
+
+        TopGainers.Clear();
+
+        foreach (
+            var item in validQuotes
+                .OrderByDescending(
+                    x =>
+                        x.Quote.ChangePercent)
+                .Take(4))
+        {
+            TopGainers.Add(
+                new StockMovementViewModel(
+                    item.Symbol,
+                    FormatPrice(
+                        item.Quote.LastPrice),
+                    FormatPercent(
+                        item.Quote.ChangePercent)));
+        }
+
+        TopLosers.Clear();
+
+        foreach (
+            var item in validQuotes
+                .OrderBy(
+                    x =>
+                        x.Quote.ChangePercent)
+                .Take(4))
+        {
+            TopLosers.Add(
+                new StockMovementViewModel(
+                    item.Symbol,
+                    FormatPrice(
+                        item.Quote.LastPrice),
+                    FormatPercent(
+                        item.Quote.ChangePercent)));
+        }
+    }
+
+    private async Task LoadWatchlistAsync(
+        CancellationToken cancellationToken)
+    {
+        var quotes =
+            await _marketDataService
+                .GetQuotesAsync(
+                    WatchSymbols,
+                    cancellationToken);
+
+        Watchlist.Clear();
+
+        for (int i = 0;
+             i < quotes.Count &&
+             i < WatchSymbols.Length;
+             i++)
+        {
+            var quote =
+                quotes[i];
+
+            if (quote is null)
+            {
+                continue;
+            }
+
+            Watchlist.Add(
+                new WatchlistItemViewModel(
+                    WatchSymbols[i],
+                    FormatPrice(
+                        quote.LastPrice),
+                    FormatPercent(
+                        quote.ChangePercent),
+                    quote.ChangePercent >= 0));
+        }
+    }
+
+    private async Task LoadChartAsync(
+        CancellationToken cancellationToken =
+            default)
+    {
+        var timeframe =
+            SelectedPeriod switch
+            {
+                "1G" =>
+                    TimeFrame.OneDay,
+
+                "1H" =>
+                    TimeFrame.OneHour,
+
+                "1A" =>
+                    TimeFrame.OneDay,
+
+                "1Y" =>
+                    TimeFrame.OneWeek,
+
+                _ =>
+                    TimeFrame.OneDay
+            };
+
+        var candles =
+            await _marketDataService
+                .GetHistoricalDataAsync(
+                    "BIST100",
+                    timeframe,
+                    cancellationToken);
+
+        var filtered =
+            SelectedPeriod switch
+            {
+                "1G" =>
+                    candles
+                        .TakeLast(40)
+                        .ToList(),
+
+                "1H" =>
+                    candles
+                        .TakeLast(30)
+                        .ToList(),
+
+                "1A" =>
+                    candles
+                        .TakeLast(31)
+                        .ToList(),
+
+                "1Y" =>
+                    candles
+                        .TakeLast(52)
+                        .ToList(),
+
+                _ =>
+                    candles.ToList()
+            };
 
         ChartPoints.Clear();
 
-        foreach (var point in newPoints)
+        foreach (var candle in filtered)
         {
-            ChartPoints.Add(point);
-        }
-    }
-
-    private static ObservableCollection<ChartPoint> CreateChartPoints(
-        string period)
-    {
-        return period switch
-        {
-            "1G" => CreateDayPoints(),
-            "1H" => CreateWeekPoints(),
-            "1A" => CreateMonthPoints(),
-            "1Y" => CreateYearPoints(),
-            _ => CreateDayPoints()
-        };
-    }
-
-    private static ObservableCollection<ChartPoint> CreateDayPoints()
-    {
-        var points = new ObservableCollection<ChartPoint>();
-
-        decimal[] values =
-        [
-            10720,
-            10765,
-            10740,
-            10820,
-            10805,
-            10855,
-            10830,
-            10890,
-            10865,
-            10920,
-            10895,
-            10842
-        ];
-
-        for (int i = 0; i < values.Length; i++)
-        {
-            points.Add(
+            ChartPoints.Add(
                 new ChartPoint(
-                    DateTime.Today.AddMinutes(570 + i * 30),
-                    values[i]));
+                    candle.Timestamp,
+                    candle.Close));
         }
-
-        return points;
     }
 
-    private static ObservableCollection<ChartPoint> CreateWeekPoints()
+    private static string
+        DetermineMarketStatus()
     {
-        var points = new ObservableCollection<ChartPoint>();
+        var now =
+            DateTime.Now;
 
-        decimal[] values =
-        [
-            10620,
-            10685,
-            10710,
-            10655,
-            10740,
-            10810,
-            10785,
-            10842
-        ];
+        var day =
+            now.DayOfWeek;
 
-        for (int i = 0; i < values.Length; i++)
+        if (day == DayOfWeek.Saturday ||
+            day == DayOfWeek.Sunday)
         {
-            points.Add(
-                new ChartPoint(
-                    DateTime.Today.AddDays(-7 + i),
-                    values[i]));
+            return "Piyasa Kapalı";
         }
 
-        return points;
+        var open =
+            new TimeSpan(
+                10,
+                0,
+                0);
+
+        var close =
+            new TimeSpan(
+                18,
+                0,
+                0);
+
+        return now.TimeOfDay >= open &&
+               now.TimeOfDay <= close
+            ? "Piyasa Açık"
+            : "Piyasa Kapalı";
     }
 
-    private static ObservableCollection<ChartPoint> CreateMonthPoints()
+    private static string FormatPrice(
+        decimal value)
     {
-        var points = new ObservableCollection<ChartPoint>();
-
-        decimal[] values =
-        [
-            10120,
-            10240,
-            10185,
-            10310,
-            10420,
-            10365,
-            10510,
-            10480,
-            10620,
-            10585,
-            10710,
-            10842
-        ];
-
-        for (int i = 0; i < values.Length; i++)
-        {
-            points.Add(
-                new ChartPoint(
-                    DateTime.Today.AddDays(-30 + i * 3),
-                    values[i]));
-        }
-
-        return points;
+        return value.ToString(
+            "N2",
+            CultureInfo
+                .GetCultureInfo("tr-TR"));
     }
 
-    private static ObservableCollection<ChartPoint> CreateYearPoints()
+    private static string FormatPercent(
+        decimal value)
     {
-        var points = new ObservableCollection<ChartPoint>();
-
-        decimal[] values =
-        [
-            8420,
-            8650,
-            8910,
-            8760,
-            9180,
-            9450,
-            9320,
-            9780,
-            10020,
-            10280,
-            10540,
-            10842
-        ];
-
-        for (int i = 0; i < values.Length; i++)
-        {
-            points.Add(
-                new ChartPoint(
-                    DateTime.Today.AddMonths(-11 + i),
-                    values[i]));
-        }
-
-        return points;
+        return string.Format(
+            CultureInfo
+                .GetCultureInfo("tr-TR"),
+            "{0:+0.00;-0.00;0.00}%",
+            value);
     }
+
+    private static string FormatChange(
+        decimal change,
+        decimal changePercent)
+    {
+        var arrow =
+            change >= 0
+                ? "▲"
+                : "▼";
+
+        return string.Format(
+            CultureInfo
+                .GetCultureInfo("tr-TR"),
+            "{0} {1:N2}   {2}",
+            arrow,
+            Math.Abs(change),
+            FormatPercent(
+                changePercent));
+    }
+
+    private sealed record QuoteItem(
+        string Symbol,
+        Quote Quote);
 }
 
 public sealed record MarketCardViewModel(
@@ -235,3 +606,9 @@ public sealed record StockMovementViewModel(
     string Symbol,
     string Price,
     string Change);
+
+public sealed record WatchlistItemViewModel(
+    string Symbol,
+    string Price,
+    string Change,
+    bool IsPositive);

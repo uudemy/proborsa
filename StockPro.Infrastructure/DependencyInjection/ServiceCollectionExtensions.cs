@@ -1,3 +1,4 @@
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using StockPro.Application.Interfaces;
 using StockPro.Domain.Interfaces;
@@ -16,17 +17,39 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IMarketDataCache, InMemoryMarketDataCache>();
 
-        services.AddSingleton<MockMarketDataProvider>();
+        services.AddSingleton<HttpClient>(_ =>
+        {
+            var client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(20)
+            };
+
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "StockPro/1.0");
+
+            return client;
+        });
+
+        services.AddSingleton<YahooMarketDataProvider>();
+
         services.AddSingleton<IMarketDataProvider>(
-            provider => provider.GetRequiredService<MockMarketDataProvider>());
+            provider =>
+                provider.GetRequiredService<
+                    YahooMarketDataProvider>());
+
+        services.AddSingleton<MockMarketDataProvider>();
 
         services.AddSingleton<MockStreamingMarketDataProvider>();
+
         services.AddSingleton<IStreamingMarketDataProvider>(
-            provider => provider.GetRequiredService<MockStreamingMarketDataProvider>());
+            provider =>
+                provider.GetRequiredService<
+                    MockStreamingMarketDataProvider>());
 
         services.AddSingleton<MockNewsProvider>();
 
         services.AddSingleton<IMarketDataService, MarketDataService>();
+
         services.AddSingleton<INewsService, NewsService>();
 
         return services;

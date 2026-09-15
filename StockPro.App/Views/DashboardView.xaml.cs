@@ -7,20 +7,27 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using StockPro.App.Models;
 using StockPro.App.ViewModels;
+using StockPro.Application.Interfaces;
 
 namespace StockPro.App.Views;
 
 public partial class DashboardView : UserControl
 {
-    public DashboardView()
+    private readonly DashboardViewModel _viewModel;
+
+    public DashboardView(
+        IMarketDataService marketDataService)
     {
         InitializeComponent();
 
-        var viewModel = new DashboardViewModel();
+        _viewModel =
+            new DashboardViewModel(
+                marketDataService);
 
-        DataContext = viewModel;
+        DataContext = _viewModel;
 
-        viewModel.ChartPoints.CollectionChanged += ChartPoints_CollectionChanged;
+        _viewModel.ChartPoints.CollectionChanged +=
+            ChartPoints_CollectionChanged;
 
         Loaded += DashboardView_Loaded;
         SizeChanged += DashboardView_SizeChanged;
@@ -52,18 +59,19 @@ public partial class DashboardView : UserControl
         if (BistChartCanvas is null)
             return;
 
-        if (DataContext is not DashboardViewModel viewModel)
-            return;
-
-        var points = viewModel.ChartPoints.ToList();
+        var points =
+            _viewModel.ChartPoints.ToList();
 
         if (points.Count < 2)
             return;
 
         BistChartCanvas.Children.Clear();
 
-        double width = BistChartCanvas.ActualWidth;
-        double height = BistChartCanvas.ActualHeight;
+        double width =
+            BistChartCanvas.ActualWidth;
+
+        double height =
+            BistChartCanvas.ActualHeight;
 
         if (width <= 0 || height <= 0)
             return;
@@ -73,103 +81,161 @@ public partial class DashboardView : UserControl
         const double topPadding = 16;
         const double bottomPadding = 24;
 
-        double chartWidth = width - leftPadding - rightPadding;
-        double chartHeight = height - topPadding - bottomPadding;
+        double chartWidth =
+            width -
+            leftPadding -
+            rightPadding;
 
-        if (chartWidth <= 0 || chartHeight <= 0)
+        double chartHeight =
+            height -
+            topPadding -
+            bottomPadding;
+
+        if (chartWidth <= 0 ||
+            chartHeight <= 0)
+        {
             return;
+        }
 
-        decimal minValue = points.Min(x => x.Value);
-        decimal maxValue = points.Max(x => x.Value);
+        decimal minValue =
+            points.Min(x => x.Value);
 
-        decimal range = maxValue - minValue;
+        decimal maxValue =
+            points.Max(x => x.Value);
+
+        decimal range =
+            maxValue - minValue;
 
         if (range == 0)
             range = 1;
 
-        // Yatay grid çizgileri
         for (int i = 0; i <= 4; i++)
         {
-            double y = topPadding + chartHeight * i / 4;
+            double y =
+                topPadding +
+                chartHeight * i / 4;
 
-            var gridLine = new Line
-            {
-                X1 = leftPadding,
-                Y1 = y,
-                X2 = width - rightPadding,
-                Y2 = y,
-                Stroke = new SolidColorBrush(
-                    Color.FromArgb(45, 139, 152, 168)),
-                StrokeThickness = 1
-            };
+            var gridLine =
+                new Line
+                {
+                    X1 = leftPadding,
+                    Y1 = y,
+                    X2 = width - rightPadding,
+                    Y2 = y,
+                    Stroke =
+                        new SolidColorBrush(
+                            Color.FromArgb(
+                                45,
+                                139,
+                                152,
+                                168)),
+                    StrokeThickness = 1
+                };
 
-            BistChartCanvas.Children.Add(gridLine);
+            BistChartCanvas.Children.Add(
+                gridLine);
         }
 
-        // Fiyat çizgisi
-        var polyline = new Polyline
-        {
-            Stroke = new SolidColorBrush(
-                (Color)ColorConverter.ConvertFromString("#3B82F6")),
-            StrokeThickness = 2.5,
-            StrokeLineJoin = PenLineJoin.Round
-        };
+        var polyline =
+            new Polyline
+            {
+                Stroke =
+                    new SolidColorBrush(
+                        (Color)ColorConverter
+                            .ConvertFromString(
+                                "#3B82F6")),
+                StrokeThickness = 2.5,
+                StrokeLineJoin =
+                    PenLineJoin.Round
+            };
 
-        for (int i = 0; i < points.Count; i++)
+        for (int i = 0;
+             i < points.Count;
+             i++)
         {
             double x =
                 leftPadding +
-                chartWidth * i / (points.Count - 1);
+                chartWidth *
+                i /
+                (points.Count - 1);
 
             double normalized =
-                (double)((points[i].Value - minValue) / range);
+                (double)(
+                    (points[i].Value -
+                     minValue) /
+                    range);
 
             double y =
                 topPadding +
                 chartHeight -
-                normalized * chartHeight;
+                normalized *
+                chartHeight;
 
-            polyline.Points.Add(new Point(x, y));
+            polyline.Points.Add(
+                new Point(x, y));
         }
 
-        BistChartCanvas.Children.Add(polyline);
+        BistChartCanvas.Children.Add(
+            polyline);
 
-        // Son fiyat noktası
-        var lastPoint = polyline.Points[^1];
+        var lastPoint =
+            polyline.Points[^1];
 
-        var marker = new Ellipse
-        {
-            Width = 8,
-            Height = 8,
-            Fill = new SolidColorBrush(
-                (Color)ColorConverter.ConvertFromString("#3B82F6"))
-        };
+        var marker =
+            new Ellipse
+            {
+                Width = 8,
+                Height = 8,
+                Fill =
+                    new SolidColorBrush(
+                        (Color)ColorConverter
+                            .ConvertFromString(
+                                "#3B82F6"))
+            };
 
-        Canvas.SetLeft(marker, lastPoint.X - 4);
-        Canvas.SetTop(marker, lastPoint.Y - 4);
+        Canvas.SetLeft(
+            marker,
+            lastPoint.X - 4);
 
-        BistChartCanvas.Children.Add(marker);
+        Canvas.SetTop(
+            marker,
+            lastPoint.Y - 4);
 
-        // Son fiyat etiketi
-        var lastValue = points[^1].Value;
+        BistChartCanvas.Children.Add(
+            marker);
 
-        var valueText = new TextBlock
-        {
-            Text = lastValue.ToString("N2"),
-            Foreground = new SolidColorBrush(
-                (Color)ColorConverter.ConvertFromString("#F1F5F9")),
-            FontSize = 11,
-            FontWeight = FontWeights.SemiBold
-        };
+        var lastValue =
+            points[^1].Value;
+
+        var valueText =
+            new TextBlock
+            {
+                Text =
+                    lastValue.ToString(
+                        "N2"),
+                Foreground =
+                    new SolidColorBrush(
+                        (Color)ColorConverter
+                            .ConvertFromString(
+                                "#F1F5F9")),
+                FontSize = 11,
+                FontWeight =
+                    FontWeights.SemiBold
+            };
 
         Canvas.SetLeft(
             valueText,
-            Math.Max(0, lastPoint.X - 35));
+            Math.Max(
+                0,
+                lastPoint.X - 35));
 
         Canvas.SetTop(
             valueText,
-            Math.Max(0, lastPoint.Y - 24));
+            Math.Max(
+                0,
+                lastPoint.Y - 24));
 
-        BistChartCanvas.Children.Add(valueText);
+        BistChartCanvas.Children.Add(
+            valueText);
     }
 }
