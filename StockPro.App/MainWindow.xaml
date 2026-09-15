@@ -283,18 +283,57 @@
             <!-- ================================================= -->
 
             <Grid Grid.Column="1"
-                  Background="{StaticResource BackgroundBrush}">
+                  Background="Yellow">
 
-                <!--
-                Dashboard'ı doğrudan oluşturuyoruz.
-                Şu aşamada ContentControl / DataTemplate /
-                Visibility trigger kullanmıyoruz.
-            -->
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
 
-                <views:DashboardView/>
+                    <TextBlock Text="MAIN WINDOW ÇALIŞIYOR"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="Black"
+                               HorizontalAlignment="Center"/>
+
+                    <Border Background="Red"
+                            Width="700"
+                            Height="300"
+                            Margin="0,30,0,0">
+
+                        <Grid Grid.Column="1"
+                              Background="Yellow">
+
+                            <StackPanel HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+
+                                <TextBlock Text="MAIN WINDOW ÇALIŞIYOR"
+                                           FontSize="30"
+                                           FontWeight="Bold"
+                                           Foreground="Black"
+                                           HorizontalAlignment="Center"/>
+
+                                <Border Background="Red"
+                                        Width="700"
+                                        Height="300"
+                                        Margin="0,30,0,0">
+
+                                    <TextBlock Text="DASHBOARD INLINE TEST"
+                                               Foreground="White"
+                                               FontSize="36"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+
+                                </Border>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+                </StackPanel>
 
             </Grid>
-
         </Grid>
 
 

@@ -21,7 +21,6 @@ F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\MainWindow.g.cs
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\Views\DashboardView.g.cs
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\Views\PlaceholderView.g.cs
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\App.g.cs
-F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\GeneratedInternalTypeHelper.g.cs
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App_MarkupCompile.cache
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\StockPro.App_MarkupCompile.lref
 F:\proje\ProBorsa\StockPro.App\obj\Debug\net9.0-windows\MainWindow.baml
